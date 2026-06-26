@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics — FraudShield</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="shell">
+
+    <div class="sidebar">
+        <div class="s-logo">
+            <div class="dot"><i class="ti ti-credit-card"></i></div>
+            <span>Fraud</span>Shield
+        </div>
+        <a href="/"             class="s-item"><i class="ti ti-layout-dashboard"></i>Dashboard</a>
+        <a href="/analytics"    class="s-item active"><i class="ti ti-chart-bar"></i>Analytics</a>
+        <a href="/export_excel" class="s-item"><i class="ti ti-file-export"></i>Export Excel</a>
+        <div class="s-sep"></div>
+        <a href="/how_it_works" class="s-item"><i class="ti ti-shield-check"></i>How it works</a>
+        <div class="s-spacer"></div>
+        <a href="/logout" class="s-item danger"><i class="ti ti-logout"></i>Logout</a>
+    </div>
+
+    <div class="main">
+
+        <div class="topbar">
+            <div>
+                <h1>Analytics</h1>
+                <p>Fraud trends and transaction insights</p>
+            </div>
+            <div class="badge-user">
+                <i class="ti ti-user"></i>{{ username }}
+            </div>
+        </div>
+
+        <div class="cards">
+            <div class="stat-card s-gray">
+                <div class="stat-label">Total</div>
+                <div class="stat-val">{{ total }}</div>
+            </div>
+            <div class="stat-card s-red">
+                <div class="stat-label">Fraud</div>
+                <div class="stat-val">{{ fraud }}</div>
+            </div>
+            <div class="stat-card s-blue">
+                <div class="stat-label">Normal</div>
+                <div class="stat-val">{{ normal }}</div>
+            </div>
+            <div class="stat-card s-green">
+                <div class="stat-label">Fraud rate</div>
+                <div class="stat-val">
+                    {% if total > 0 %}{{ ((fraud/total)*100)|round(2) }}%
+                    {% else %}0%{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-lg-8">
+                <div class="panel panel-last">
+                    <div class="panel-title">
+                        <i class="ti ti-calendar"></i>
+                        Daily fraud trend (last 14 days)
+                    </div>
+                    <canvas id="dailyChart" height="110"></canvas>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="panel panel-last">
+                    <div class="panel-title">
+                        <i class="ti ti-chart-donut"></i>
+                        Fraud vs normal
+                    </div>
+                    <canvas id="donutChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-lg-6">
+                <div class="panel panel-last">
+                    <div class="panel-title">
+                        <i class="ti ti-currency-rupee"></i>
+                        Fraud by amount range
+                    </div>
+                    <canvas id="amountChart" height="130"></canvas>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="panel panel-last">
+                    <div class="panel-title">
+                        <i class="ti ti-upload"></i>
+                        Prediction source breakdown
+                    </div>
+                    <canvas id="sourceChart" height="130"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const daily  = {{ daily | tojson }};
+const dates  = daily.map(d => d[0]).reverse();
+const totals = daily.map(d => d[1]).reverse();
+const frauds = daily.map(d => d[2]).reverse();
+
+new Chart(document.getElementById('dailyChart'), {
+    type: 'bar',
+    data: {
+        labels: dates,
+        datasets: [
+            {
+                label:'Total',
+                data:totals,
+                backgroundColor:'#185FA533',
+                borderColor:'#185FA5',
+                borderWidth:1,
+                borderRadius:4
+            },
+            {
+                label:'Fraud',
+                data:frauds,
+                backgroundColor:'#E24B4A33',
+                borderColor:'#E24B4A',
+                borderWidth:1,
+                borderRadius:4
+            }
+        ]
+    },
+    options:{
+        responsive:true,
+        plugins:{ legend:{ position:'top',labels:{ font:{ size:12 } } } },
+        scales:{ y:{ beginAtZero:true,grid:{ color:'rgba(0,0,0,0.04)' } } }
+    }
+});
+
+new Chart(document.getElementById('donutChart'), {
+    type:'doughnut',
+    data:{
+        labels:['Fraud','Normal'],
+        datasets:[{
+            data:[{{ fraud }},{{ normal }}],
+            backgroundColor:['#E24B4A','#185FA5'],
+            borderColor:['#fff','#fff'],
+            borderWidth:3
+        }]
+    },
+    options:{
+        responsive:true,
+        plugins:{ legend:{ position:'bottom',labels:{ font:{ size:12 } } } }
+    }
+});
+
+const ar = {{ amount_ranges | tojson }};
+new Chart(document.getElementById('amountChart'), {
+    type:'bar',
+    data:{
+        labels:ar.map(d => d[0]),
+        datasets:[{
+            label:'Fraud count',
+            data:ar.map(d => d[1]),
+            backgroundColor:'#E24B4A33',
+            borderColor:'#E24B4A',
+            borderWidth:1,
+            borderRadius:4
+        }]
+    },
+    options:{
+        responsive:true,
+        plugins:{ legend:{ display:false } },
+        scales:{ y:{ beginAtZero:true,grid:{ color:'rgba(0,0,0,0.04)' } } }
+    }
+});
+
+const src = {{ sources | tojson }};
+new Chart(document.getElementById('sourceChart'), {
+    type:'pie',
+    data:{
+        labels:src.map(d => d[0]==='batch' ? 'Batch upload':'Manual entry'),
+        datasets:[{
+            data:src.map(d => d[1]),
+            backgroundColor:['#185FA5','#E24B4A'],
+            borderColor:['#fff','#fff'],
+            borderWidth:3
+        }]
+    },
+    options:{
+        responsive:true,
+        plugins:{ legend:{ position:'bottom',labels:{ font:{ size:12 } } } }
+    }
+});
+</script>
+</body>
+</html>

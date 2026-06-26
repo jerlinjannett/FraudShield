@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — FraudShield</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="auth-wrap">
+    <div class="auth-card">
+
+        <div class="auth-logo">
+            <div class="logo-icon">
+                <i class="ti ti-credit-card"></i>
+            </div>
+            <h2>FraudShield</h2>
+            <p>Credit card fraud detection system</p>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-danger py-2 mb-3" style="font-size:13px;">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/login">
+
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <div class="input-group">
+                    <span class="input-group-text" style="border-radius:7px 0 0 7px;background:#f8f9fa;">
+                        <i class="ti ti-user" style="font-size:15px;color:#888;"></i>
+                    </span>
+                    <input type="text" name="username"
+                           class="form-control"
+                           style="border-radius:0 7px 7px 0;"
+                           required autofocus>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Password</label>
+                <div class="input-group">
+                    <span class="input-group-text" style="border-radius:7px 0 0 7px;background:#f8f9fa;">
+                        <i class="ti ti-lock" style="font-size:15px;color:#888;"></i>
+                    </span>
+                    <input type="password" name="password"
+                           id="passwordField"
+                           class="form-control"
+                           style="border-radius:0;"
+                           required>
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            style="border-radius:0 7px 7px 0;"
+                            onclick="togglePass('passwordField')">
+                        <i class="ti ti-eye" style="font-size:14px;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2">
+                <i class="ti ti-login" style="font-size:14px;margin-right:5px;"></i>
+                Login to dashboard
+            </button>
+
+        </form>
+
+        <hr style="margin:1.5rem 0;border-color:#eee;">
+
+        <p class="text-center mb-2" style="font-size:13px;color:#888;">
+            Don't have an account?
+        </p>
+        <a href="/signup" class="btn btn-outline-primary w-100">
+            <i class="ti ti-user-plus" style="font-size:14px;margin-right:5px;"></i>
+            Create new account
+        </a>
+
+    </div>
+</div>
+
+<script>
+function togglePass(id) {
+    const f = document.getElementById(id);
+    f.type = f.type === 'password' ? 'text' : 'password';
+}
+</script>
+</body>
+</html>

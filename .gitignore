@@ -1,0 +1,15 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+.env
+creditcard.csv
+fraud_model.pkl
+scaler.pkl
+creditcard.csv
+uploads/creditcard.csv
+results/prediction_results.csv
+*.pkl
+__pycache__/
+venv/
+.venv/

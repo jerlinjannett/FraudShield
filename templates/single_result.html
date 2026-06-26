@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result — FraudShield</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="shell">
+
+    <div class="sidebar">
+        <div class="s-logo">
+            <div class="dot"><i class="ti ti-credit-card"></i></div>
+            <span>Fraud</span>Shield
+        </div>
+        <a href="/"             class="s-item"><i class="ti ti-layout-dashboard"></i>Dashboard</a>
+        <a href="/analytics"    class="s-item"><i class="ti ti-chart-bar"></i>Analytics</a>
+        <div class="s-sep"></div>
+        <a href="/how_it_works" class="s-item"><i class="ti ti-shield-check"></i>How it works</a>
+        <div class="s-spacer"></div>
+        <a href="/logout" class="s-item danger"><i class="ti ti-logout"></i>Logout</a>
+    </div>
+
+    <div class="main">
+
+        <div class="topbar">
+            <div>
+                <h1>Transaction result</h1>
+                <p>Single transaction analysis</p>
+            </div>
+            <div class="badge-user">
+                <i class="ti ti-user"></i>{{ username }}
+            </div>
+        </div>
+
+        <div class="result-wrap">
+            <div class="result-card">
+
+                <div class="result-icon {% if color=='danger' %}fraud{% else %}safe{% endif %}">
+                    {% if color == 'danger' %}
+                    <i class="ti ti-alert-triangle"
+                       style="font-size:36px;color:#c0392b;"></i>
+                    {% else %}
+                    <i class="ti ti-shield-check"
+                       style="font-size:36px;color:#2e7d32;"></i>
+                    {% endif %}
+                </div>
+
+                <h3 class="fw-bold text-{{ color }} mb-3">{{ result }}</h3>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <div class="stat-card {% if color=='danger' %}s-red{% else %}s-green{% endif %} text-center">
+                            <div class="stat-label">Transaction amount</div>
+                            <div class="stat-val">₹{{ amount }}</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-card {% if color=='danger' %}s-red{% else %}s-green{% endif %} text-center">
+                            <div class="stat-label">Fraud probability</div>
+                            <div class="stat-val">{{ probability }}%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mb-1">
+                    <small class="text-muted">Fraud risk level</small>
+                    <small class="fw-bold text-{{ color }}">{{ probability }}%</small>
+                </div>
+                <div class="progress mb-4" style="height:16px;border-radius:8px;">
+                    <div class="progress-bar bg-{{ color }} fw-bold"
+                         style="width:{{ probability }}%;border-radius:8px;font-size:12px;">
+                        {{ probability }}%
+                    </div>
+                </div>
+
+                {% if color == 'danger' %}
+                <div class="alert alert-danger" style="font-size:13px;">
+                    <i class="ti ti-alert-circle" style="font-size:14px;margin-right:5px;"></i>
+                    This transaction has been flagged as potentially fraudulent.
+                    Please verify with your bank immediately.
+                </div>
+                {% else %}
+                <div class="alert alert-success" style="font-size:13px;">
+                    <i class="ti ti-circle-check" style="font-size:14px;margin-right:5px;"></i>
+                    This transaction appears to be legitimate and safe to process.
+                </div>
+                {% endif %}
+
+                <a href="/" class="btn btn-primary w-100 py-2">
+                    <i class="ti ti-arrow-left" style="font-size:14px;margin-right:5px;"></i>
+                    Check another transaction
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

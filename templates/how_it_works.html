@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works — FraudShield</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="shell">
+
+    <div class="sidebar">
+        <div class="s-logo">
+            <div class="dot"><i class="ti ti-credit-card"></i></div>
+            <span>Fraud</span>Shield
+        </div>
+        <a href="/"             class="s-item"><i class="ti ti-layout-dashboard"></i>Dashboard</a>
+        <a href="/analytics"    class="s-item"><i class="ti ti-chart-bar"></i>Analytics</a>
+        <a href="/export_excel" class="s-item"><i class="ti ti-file-export"></i>Export Excel</a>
+        <div class="s-sep"></div>
+        <a href="/how_it_works" class="s-item active"><i class="ti ti-shield-check"></i>How it works</a>
+        <div class="s-spacer"></div>
+        <a href="/logout" class="s-item danger"><i class="ti ti-logout"></i>Logout</a>
+    </div>
+
+    <div class="main">
+
+        <div class="topbar">
+            <div>
+                <h1>How it works</h1>
+                <p>Understanding credit card fraud detection</p>
+            </div>
+            <div class="badge-user">
+                <i class="ti ti-user"></i>{{ username }}
+            </div>
+        </div>
+
+        <!-- HERO -->
+        <div class="panel text-center mb-3" style="padding:2rem;">
+            <div class="hiw-hero-icon mx-auto mb-3">
+                <i class="ti ti-shield-check"></i>
+            </div>
+            <h4 class="fw-bold mb-2">Credit card fraud detection system</h4>
+            <p class="text-muted mx-auto mb-0"
+               style="max-width:560px;font-size:13.5px;line-height:1.8;">
+                Modern fraud detection systems analyze transactions within milliseconds
+                using machine learning algorithms to identify suspicious patterns and
+                prevent unauthorized financial activity before it causes harm.
+            </p>
+        </div>
+
+        <!-- DETECTION PROCESS -->
+        <div class="panel mb-3">
+            <div class="hiw-section-label">Detection process</div>
+            <div class="hiw-steps">
+
+                <div class="hiw-step">
+                    <div class="hiw-step-line">
+                        <div class="hiw-step-dot">1</div>
+                        <div class="hiw-step-connector"></div>
+                    </div>
+                    <div class="hiw-step-body">
+                        <h6 class="fw-bold mb-1">Transaction ingestion</h6>
+                        <p class="text-muted mb-0" style="font-size:13px;">
+                            Each transaction is captured with anonymized PCA features (V1–V28)
+                            along with the transaction amount, forming the input vector for analysis.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="hiw-step">
+                    <div class="hiw-step-line">
+                        <div class="hiw-step-dot">2</div>
+                        <div class="hiw-step-connector"></div>
+                    </div>
+                    <div class="hiw-step-body">
+                        <h6 class="fw-bold mb-1">Feature normalization</h6>
+                        <p class="text-muted mb-0" style="font-size:13px;">
+                            Transaction amounts are normalized using StandardScaler to ensure
+                            consistent scale across all input features before model inference.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="hiw-step">
+                    <div class="hiw-step-line">
+                        <div class="hiw-step-dot">3</div>
+                        <div class="hiw-step-connector"></div>
+                    </div>
+                    <div class="hiw-step-body">
+                        <h6 class="fw-bold mb-1">Risk scoring</h6>
+                        <p class="text-muted mb-0" style="font-size:13px;">
+                            The Random Forest model evaluates each transaction across 100 decision
+                            trees and computes a fraud probability score between 0% and 100%.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="hiw-step">
+                    <div class="hiw-step-line">
+                        <div class="hiw-step-dot">4</div>
+                    </div>
+                    <div class="hiw-step-body">
+                        <h6 class="fw-bold mb-1">Classification and storage</h6>
+                        <p class="text-muted mb-0" style="font-size:13px;">
+                            Transactions exceeding the classification threshold are flagged as
+                            fraudulent. All results are persisted to the database with a timestamp
+                            for audit and review.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ANOMALY DETECTION -->
+        <div class="panel mb-3">
+            <div class="hiw-section-label">Anomaly detection techniques</div>
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <div class="hiw-card h-100">
+                        <div class="hiw-card-icon" style="background:#e8f0fb;">
+                            <i class="ti ti-activity" style="color:#185FA5;font-size:18px;"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1" style="font-size:13px;">Behavioral profiling</h6>
+                        <p class="text-muted mb-0" style="font-size:12.5px;">
+                            Algorithms establish a baseline of normal transaction patterns,
+                            detecting deviations in purchase frequency, location, and amount.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="hiw-card h-100">
+                        <div class="hiw-card-icon" style="background:#fff3e0;">
+                            <i class="ti ti-clock-alert" style="color:#e65100;font-size:18px;"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1" style="font-size:13px;">Temporal analysis</h6>
+                        <p class="text-muted mb-0" style="font-size:12.5px;">
+                            Transactions at unusual hours or in rapid succession receive higher
+                            risk scores, as these patterns correlate with fraudulent behavior.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="hiw-card h-100">
+                        <div class="hiw-card-icon" style="background:#fde8e8;">
+                            <i class="ti ti-map-pin-off" style="color:#c0392b;font-size:18px;"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1" style="font-size:13px;">Geographic anomalies</h6>
+                        <p class="text-muted mb-0" style="font-size:12.5px;">
+                            Purchases from distant locations within a short timeframe are flagged
+                            as physically impossible and reviewed immediately.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="hiw-card h-100">
+                        <div class="hiw-card-icon" style="background:#e8f5e9;">
+                            <i class="ti ti-chart-dots" style="color:#2e7d32;font-size:18px;"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1" style="font-size:13px;">Statistical outliers</h6>
+                        <p class="text-muted mb-0" style="font-size:12.5px;">
+                            Transactions whose feature vectors deviate significantly from learned
+                            distributions are classified as anomalous regardless of amount.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ML MODELS -->
+        <div class="panel mb-3">
+            <div class="hiw-section-label">Machine learning models</div>
+            <div class="row g-3">
+
+                <div class="col-md-3 col-6">
+                    <div class="hiw-model-pill active-model">
+                        <i class="ti ti-trees"></i>
+                        <div>
+                            <div class="fw-bold" style="font-size:12px;">Random Forest</div>
+                            <span class="hiw-active-badge">Active</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="hiw-model-pill">
+                        <i class="ti ti-chart-line" style="font-size:20px;"></i>
+                        <div style="font-size:12px;">Logistic Regression</div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="hiw-model-pill">
+                        <i class="ti ti-brain" style="font-size:20px;"></i>
+                        <div style="font-size:12px;">Neural Network</div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="hiw-model-pill">
+                        <i class="ti ti-box-model" style="font-size:20px;"></i>
+                        <div style="font-size:12px;">Isolation Forest</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SECURITY -->
+        <div class="panel mb-3">
+            <div class="hiw-section-label">Security protocols</div>
+            <div class="row g-3">
+
+                <div class="col-md-4">
+                    <div class="hiw-card h-100">
+                        <div class="hiw-card-icon" style="background:#e8f0fb;">
+                            <i class="ti ti-lock" style="color:#185FA5;font-size:18px;"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1" style="font-size:13px;">3D Secure (3DS)</h6>
+                        <p class="text-muted mb-0" style="font-size:12.5px;">
+                            An additional authentication layer requiring cardholder verification
+                            for online transactions, reducing unauthorized card-not-present fraud.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="hiw-card h-100">
+                        <div class="hiw-card-icon" style="background:#e8f5e9;">
+                            <i class="ti ti-home-check" style="color:#2e7d32;font-size:18px;"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1" style="font-size:13px;">Address verification</h6>
+                        <p class="text-muted mb-0" style="font-size:12.5px;">
+                            The Address Verification System (AVS) cross-references billing
+                            addresses at checkout against bank records before approval.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="hiw-card h-100">
+                        <div class="hiw-card-icon" style="background:#fff3e0;">
+                            <i class="ti ti-coin" style="color:#e65100;font-size:18px;"></i>
+                        </div>
+                        <h6 class="fw-bold mb-1" style="font-size:13px;">Tokenization</h6>
+                        <p class="text-muted mb-0" style="font-size:12.5px;">
+                            Primary account numbers are replaced with unique digital tokens per
+                            transaction, rendering intercepted data useless to attackers.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- CAPABILITIES -->
+        <div class="panel panel-last">
+            <div class="hiw-section-label">System capabilities</div>
+            <div class="row g-2">
+                {% set features = [
+                    'Random Forest classification',
+                    'SMOTE class balancing',
+                    'StandardScaler normalization',
+                    'Batch CSV and Excel analysis',
+                    'Real-time single prediction',
+                    'Paste row auto-fill',
+                    'SQLite transaction history',
+                    'Analytics dashboard',
+                    'Excel history export',
+                    'Login and signup system',
+                    'Admin user management',
+                    'Dark and light mode toggle'
+                ] %}
+                {% for f in features %}
+                <div class="col-md-4 col-6">
+                    <div class="hiw-feature-row">
+                        <i class="ti ti-circle-check"
+                           style="color:#2e7d32;font-size:14px;flex-shrink:0;"></i>
+                        <span style="font-size:12px;">{{ f }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="hiw-status mt-3">
+                <i class="ti ti-circle-check"></i>
+                <span>
+                    Model trained using Random Forest + SMOTE balanced dataset
+                    — ready for inference
+                </span>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up — FraudShield</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="auth-wrap">
+    <div class="auth-card">
+
+        <div class="auth-logo">
+            <div class="logo-icon">
+                <i class="ti ti-user-plus"></i>
+            </div>
+            <h2>Create account</h2>
+            <p>Join FraudShield today</p>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-danger py-2 mb-3" style="font-size:13px;">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        {% if success %}
+        <div class="alert alert-success py-2 mb-3" style="font-size:13px;">
+            {{ success }}
+        </div>
+        <a href="/login" class="btn btn-primary w-100">
+            <i class="ti ti-login" style="font-size:14px;margin-right:5px;"></i>
+            Go to login
+        </a>
+        {% else %}
+
+        <form method="POST" action="/signup">
+
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <div class="input-group">
+                    <span class="input-group-text" style="border-radius:7px 0 0 7px;background:#f8f9fa;">
+                        <i class="ti ti-user" style="font-size:15px;color:#888;"></i>
+                    </span>
+                    <input type="text" name="username"
+                           class="form-control"
+                           style="border-radius:0 7px 7px 0;"
+                           minlength="3" required autofocus>
+                </div>
+                <small class="text-muted">Minimum 3 characters</small>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email address</label>
+                <div class="input-group">
+                    <span class="input-group-text" style="border-radius:7px 0 0 7px;background:#f8f9fa;">
+                        <i class="ti ti-mail" style="font-size:15px;color:#888;"></i>
+                    </span>
+                    <input type="email" name="email"
+                           class="form-control"
+                           style="border-radius:0 7px 7px 0;"
+                           required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <div class="input-group">
+                    <span class="input-group-text" style="border-radius:7px 0 0 7px;background:#f8f9fa;">
+                        <i class="ti ti-lock" style="font-size:15px;color:#888;"></i>
+                    </span>
+                    <input type="password" name="password"
+                           id="password"
+                           class="form-control"
+                           style="border-radius:0;"
+                           minlength="6" required>
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            style="border-radius:0 7px 7px 0;"
+                            onclick="togglePass('password')">
+                        <i class="ti ti-eye" style="font-size:14px;"></i>
+                    </button>
+                </div>
+                <small class="text-muted">Minimum 6 characters</small>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Confirm password</label>
+                <div class="input-group">
+                    <span class="input-group-text" style="border-radius:7px 0 0 7px;background:#f8f9fa;">
+                        <i class="ti ti-lock-check" style="font-size:15px;color:#888;"></i>
+                    </span>
+                    <input type="password" name="password2"
+                           id="password2"
+                           class="form-control"
+                           style="border-radius:0;"
+                           required>
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            style="border-radius:0 7px 7px 0;"
+                            onclick="togglePass('password2')">
+                        <i class="ti ti-eye" style="font-size:14px;"></i>
+                    </button>
+                </div>
+                <small id="matchMsg" class="d-block mt-1"></small>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2">
+                <i class="ti ti-user-plus" style="font-size:14px;margin-right:5px;"></i>
+                Create account
+            </button>
+
+        </form>
+
+        {% endif %}
+
+        <hr style="margin:1.5rem 0;border-color:#eee;">
+        <p class="text-center mb-0" style="font-size:13px;color:#888;">
+            Already have an account?
+            <a href="/login" style="color:#185FA5;font-weight:600;">Login here</a>
+        </p>
+
+    </div>
+</div>
+
+<script>
+function togglePass(id) {
+    const f = document.getElementById(id);
+    f.type = f.type === 'password' ? 'text' : 'password';
+}
+const p1  = document.getElementById('password');
+const p2  = document.getElementById('password2');
+const msg = document.getElementById('matchMsg');
+if (p2) {
+    p2.addEventListener('input', function() {
+        if (p1.value === p2.value) {
+            msg.innerHTML = '<span style="color:#2e7d32;font-size:12px;">&#10003; Passwords match</span>';
+        } else {
+            msg.innerHTML = '<span style="color:#c0392b;font-size:12px;">&#10007; Passwords do not match</span>';
+        }
+    });
+}
+</script>
+</body>
+</html>
