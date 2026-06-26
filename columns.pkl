@@ -1,0 +1,14 @@
+import pandas as pd
+import pickle
+
+df = pd.read_csv("creditcard.csv")
+
+if "Time" in df.columns:
+    df = df.drop("Time", axis=1)
+
+X_columns = df.drop("Class", axis=1).columns.tolist()
+
+with open("columns.pkl", "wb") as f:
+    pickle.dump(X_columns, f)
+
+print("columns.pkl created successfully!")

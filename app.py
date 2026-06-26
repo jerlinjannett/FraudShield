@@ -25,11 +25,8 @@ with open("fraud_model.pkl", "rb") as f:
 with open("scaler.pkl", "rb") as f:
     scaler = pickle.load(f)
 
-df_ref = pd.read_csv("creditcard.csv")
-if "Time" in df_ref.columns:
-    df_ref.drop("Time", axis=1, inplace=True)
-X_columns = df_ref.drop("Class", axis=1).columns
-
+with open("columns.pkl", "rb") as f:
+    X_columns = pickle.load(f)
 
 # ── HELPERS ────────────────────────────────────────────
 def hash_password(password):
@@ -401,10 +398,10 @@ def predict_single():
 @app.route("/how_it_works")
 @login_required
 def how_it_works():
-    return render_template(
-        "how_it_works.html",
-        username=session.get("username")
-    )
+    return render_template("how_it_works.html",
+        username=session.get("username"))
+
+
 # ── ANALYTICS ──────────────────────────────────────────
 @app.route("/analytics")
 @login_required
@@ -481,8 +478,15 @@ def download():
         as_attachment=True
     )
 
+# ── HOW IT WORKS ──────────────────────────────────────
+@app.route("/download")
+@login_required
+def download():
+    return send_file(
+        os.path.join(RESULT_DIR, "prediction_results.csv"),
+        as_attachment=True
+    )
 
 if __name__ == "__main__":
-    print("Running file:", __file__)
     print("🚀 http://127.0.0.1:5000")
-    app.run(debug=True)
+    app.run(debug=False)
